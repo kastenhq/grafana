@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"cuelang.org/go/cue"
 	"github.com/google/go-cmp/cmp"
 	"golang.org/x/tools/txtar"
 )
@@ -30,8 +29,7 @@ func TestGenerate(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.Name+" apply default value", func(t *testing.T) {
-			var r cue.Runtime
-			scmInstance, err := r.Compile(c.Name+".cue", c.CUE)
+			scmInstance, err := rt.Compile(c.Name+".cue", c.CUE)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -42,7 +40,7 @@ func TestGenerate(t *testing.T) {
 			}
 			b := []byte(out.Value.(string))
 
-			if s := cmp.Diff(string(b), c.Full); s != "" {
+			if s := cmp.Diff(c.Full, string(b)); s != "" {
 				t.Fatal(s)
 			}
 		})
@@ -50,8 +48,7 @@ func TestGenerate(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.Name+" trim default value", func(t *testing.T) {
-			var r cue.Runtime
-			scmInstance, err := r.Compile(c.Name+".cue", c.CUE)
+			scmInstance, err := rt.Compile(c.Name+".cue", c.CUE)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -61,7 +58,7 @@ func TestGenerate(t *testing.T) {
 				t.Fatal(err)
 			}
 			b := []byte(out.Value.(string))
-			if s := cmp.Diff(string(b), c.Trimmed); s != "" {
+			if s := cmp.Diff(c.Trimmed, string(b)); s != "" {
 				t.Fatal(s)
 			}
 		})
