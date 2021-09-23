@@ -6,12 +6,9 @@ import (
 	"io/fs"
 	"path/filepath"
 
-	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/load"
 	"github.com/grafana/grafana"
 )
-
-var rt = &cue.Runtime{}
 
 // Families can have variants, where more typing information narrows the
 // possible values for certain keys in schemas. These are a meta-property

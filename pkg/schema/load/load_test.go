@@ -17,6 +17,7 @@ import (
 	"cuelang.org/go/cue/load"
 	cuejson "cuelang.org/go/pkg/encoding/json"
 	"github.com/grafana/grafana/pkg/schema"
+	"github.com/grafana/grafana/pkg/schema/rtinstance"
 	"github.com/laher/mergefs"
 	"github.com/stretchr/testify/require"
 )
@@ -180,7 +181,6 @@ func TestCueErrorWrapper(t *testing.T) {
 	require.Contains(t, err.Error(), "line: ")
 }
 
-<<<<<<< HEAD
 func TestAllPluginsInDist(t *testing.T) {
 	overlay, err := defaultOverlay(p)
 	require.NoError(t, err)
@@ -192,10 +192,10 @@ func TestAllPluginsInDist(t *testing.T) {
 		Dir:        filepath.Join(prefix, dashboardDir, "dist"),
 		Package:    "dist",
 	}
-	inst, err := rt.Build(load.Instances(nil, cfg)[0])
+	inst, err := rtinstance.Rt.Build(load.Instances(nil, cfg)[0])
 	require.NoError(t, err)
 
-	dinst, err := rt.Compile("str", `
+	dinst, err := rtinstance.Rt.Compile("str", `
 	Family: compose: Panel: {}
 	typs: [for typ, _ in Family.compose.Panel {typ}]
 	`)
@@ -221,7 +221,8 @@ func TestAllPluginsInDist(t *testing.T) {
 	sort.Strings(loadedPanelTypes)
 
 	require.Equal(t, loadedPanelTypes, importedPanelTypes, "%s/family.cue needs updating, it must compose the same set of panel plugin models that are found by the plugin loader", cfg.Dir)
-=======
+}
+
 func TestDevenvDashboardTrimApplyDefaults(t *testing.T) {
 	validdir := filepath.Join("..", "..", "..", "devenv", "dev-dashboards")
 
@@ -262,11 +263,22 @@ func TestDevenvDashboardTrimApplyDefaults(t *testing.T) {
 					dsSchema, err := schema.SearchAndValidate(sch, byt)
 					require.NoError(t, err)
 
+					// Trimmed default json file
 					trimmed, err := schema.TrimDefaults(schema.Resource{Value: byt}, dsSchema.CUE())
 					require.NoError(t, err)
 
+					// store the trimmed result into testdata for easy debug
 					out, err := schema.ApplyDefaults(schema.Resource{Value: trimmed.Value.(string)}, dsSchema.CUE())
 					require.NoError(t, err)
+
+					// file, _ := os.Create(filepath.Join("testdata", filepath.Base(path)))
+					// defer file.Close()
+					// var jsonMap map[string]interface{}
+					// json.Unmarshal([]byte(out.Value.(string)), &jsonMap)
+					// jdata, err := json.MarshalIndent(jsonMap, "", "  ")
+					// require.NoError(t, err)
+					// file.Write(jdata)
+					// require.NoError(t, err)
 					require.JSONEq(t, string(byt), out.Value.(string))
 				})
 				return nil
@@ -279,5 +291,4 @@ func TestDevenvDashboardTrimApplyDefaults(t *testing.T) {
 	ddash, err := DistDashboardFamily(p)
 	require.NoError(t, err, "error while loading dist dashboard scuemata")
 	t.Run("dist", doTest(ddash))
->>>>>>> 2921077fae (commit the test regarding all devenvs)
 }
