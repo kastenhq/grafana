@@ -245,7 +245,7 @@ func TestDataAccess(t *testing.T) {
 			return nil
 		})
 
-		err := DeleteDataSource(&models.DeleteDataSourceCommand{ID: ds.Id, UID: "nisse-uid", Name: "nisse", OrgID: 123123})
+		err := DeleteDataSource(&models.DeleteDataSourceCommand{ID: ds.Id, UID: ds.Uid, Name: ds.Name, OrgID: ds.OrgId})
 		require.NoError(t, err)
 
 		require.Eventually(t, func() bool {
@@ -253,9 +253,9 @@ func TestDataAccess(t *testing.T) {
 		}, time.Second, time.Millisecond)
 
 		require.Equal(t, ds.Id, deleted.ID)
-		require.Equal(t, int64(123123), deleted.OrgID)
-		require.Equal(t, "nisse", deleted.Name)
-		require.Equal(t, "nisse-uid", deleted.UID)
+		require.Equal(t, ds.OrgId, deleted.OrgID)
+		require.Equal(t, ds.Name, deleted.Name)
+		require.Equal(t, ds.Uid, deleted.UID)
 	})
 
 	t.Run("DeleteDataSourceByName", func(t *testing.T) {
