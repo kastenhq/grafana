@@ -86,9 +86,9 @@ func TestAccountDataAccess(t *testing.T) {
 
 				q1 := models.GetUserOrgListQuery{UserId: ac1.Id}
 				q2 := models.GetUserOrgListQuery{UserId: ac2.Id}
-				err = GetUserOrgList(&q1)
+				err = GetUserOrgList(context.Background(), &q1)
 				So(err, ShouldBeNil)
-				err = GetUserOrgList(&q2)
+				err = GetUserOrgList(context.Background(), &q2)
 				So(err, ShouldBeNil)
 
 				So(q1.Result[0].OrgId, ShouldEqual, q2.Result[0].OrgId)
@@ -145,7 +145,7 @@ func TestAccountDataAccess(t *testing.T) {
 
 			Convey("Should be able to read user info projection", func() {
 				query := models.GetUserProfileQuery{UserId: ac1.Id}
-				err = GetUserProfile(&query)
+				err = GetUserProfile(context.Background(), &query)
 
 				So(err, ShouldBeNil)
 				So(query.Result.Email, ShouldEqual, "ac1@test.com")
@@ -154,7 +154,7 @@ func TestAccountDataAccess(t *testing.T) {
 
 			Convey("Can search users", func() {
 				query := models.SearchUsersQuery{Query: ""}
-				err := SearchUsers(&query)
+				err := SearchUsers(context.Background(), &query)
 
 				So(err, ShouldBeNil)
 				So(query.Result.Users[0].Email, ShouldEqual, "ac1@test.com")
@@ -201,7 +201,7 @@ func TestAccountDataAccess(t *testing.T) {
 
 				Convey("Can get user organizations", func() {
 					query := models.GetUserOrgListQuery{UserId: ac2.Id}
-					err := GetUserOrgList(&query)
+					err := GetUserOrgList(context.Background(), &query)
 
 					So(err, ShouldBeNil)
 					So(len(query.Result), ShouldEqual, 2)
@@ -243,7 +243,7 @@ func TestAccountDataAccess(t *testing.T) {
 
 				Convey("Can set using org", func() {
 					cmd := models.SetUsingOrgCommand{UserId: ac2.Id, OrgId: ac1.OrgId}
-					err := SetUsingOrg(&cmd)
+					err := SetUsingOrg(context.Background(), &cmd)
 					So(err, ShouldBeNil)
 
 					Convey("SignedInUserQuery with a different org", func() {
