@@ -11,7 +11,7 @@ import (
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/load"
 	"github.com/grafana/grafana/pkg/schema"
-	"github.com/grafana/grafana/pkg/schema/rtinstance"
+	"github.com/grafana/grafana/pkg/schema/internal"
 )
 
 // mapPanelModel maps a schema from the #PanelModel form in which it's declared
@@ -21,7 +21,7 @@ import (
 func mapPanelModel(id string, vcs schema.VersionedCueSchema) cue.Value {
 	maj, min := vcs.Version()
 	// Ignore err return, this can't fail to compile
-	inter, _ := rtinstance.Rt.Compile(fmt.Sprintf("%s-glue-panelComposition", id), fmt.Sprintf(`
+	inter, _ := internal.Runtime.Compile(fmt.Sprintf("%s-glue-panelComposition", id), fmt.Sprintf(`
 	in: {
 		type: %q
 		v: {
@@ -109,7 +109,7 @@ func loadPanelScuemata(p BaseLoadPaths) (map[string]cue.Value, error) {
 		}
 
 		li := load.Instances([]string{filepath.Join("/", dpath, "models.cue")}, cfg)
-		imod, err := rtinstance.Rt.Build(li[0])
+		imod, err := internal.Runtime.Build(li[0])
 		if err != nil {
 			return err
 		}

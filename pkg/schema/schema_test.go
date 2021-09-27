@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/grafana/grafana/pkg/schema/rtinstance"
+	"github.com/grafana/grafana/pkg/schema/internal"
 	"golang.org/x/tools/txtar"
 )
 
@@ -31,7 +31,7 @@ func TestGenerate(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.Name+" apply default value", func(t *testing.T) {
-			scmInstance, err := rtinstance.Rt.Compile(c.Name+".cue", c.CUE)
+			scmInstance, err := internal.Runtime.Compile(c.Name+".cue", c.CUE)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -51,7 +51,7 @@ func TestGenerate(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.Name+" trim default value", func(t *testing.T) {
-			scmInstance, err := rtinstance.Rt.Compile(c.Name+".cue", c.CUE)
+			scmInstance, err := internal.Runtime.Compile(c.Name+".cue", c.CUE)
 			if err != nil {
 				t.Fatal(err)
 			}

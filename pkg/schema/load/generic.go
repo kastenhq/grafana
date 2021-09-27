@@ -6,7 +6,7 @@ import (
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/load"
 	"github.com/grafana/grafana/pkg/schema"
-	"github.com/grafana/grafana/pkg/schema/rtinstance"
+	"github.com/grafana/grafana/pkg/schema/internal"
 )
 
 // getBaseScuemata attempts to load the base scuemata family and schema
@@ -38,7 +38,7 @@ func getBaseScuemata(p BaseLoadPaths) (*cue.Instance, error) {
 		// this "/".
 		Dir: prefix,
 	}
-	return rtinstance.Rt.Build(load.Instances([]string{
+	return internal.Runtime.Build(load.Instances([]string{
 		filepath.Join(prefix, "grafana", "cue", "scuemata", "scuemata.cue"),
 		filepath.Join(prefix, "grafana", "cue", "scuemata", "panel-plugin.cue"),
 	}, cfg)[0])
@@ -107,7 +107,7 @@ func (gvs *genericVersionedSchema) Validate(r schema.Resource) error {
 	if name == "" {
 		name = "resource"
 	}
-	rv, err := rtinstance.Rt.Compile(name, r.Value)
+	rv, err := internal.Runtime.Compile(name, r.Value)
 	if err != nil {
 		return err
 	}

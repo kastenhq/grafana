@@ -17,7 +17,7 @@ import (
 	"cuelang.org/go/cue/load"
 	cuejson "cuelang.org/go/pkg/encoding/json"
 	"github.com/grafana/grafana/pkg/schema"
-	"github.com/grafana/grafana/pkg/schema/rtinstance"
+	"github.com/grafana/grafana/pkg/schema/internal"
 	"github.com/laher/mergefs"
 	"github.com/stretchr/testify/require"
 )
@@ -192,10 +192,10 @@ func TestAllPluginsInDist(t *testing.T) {
 		Dir:        filepath.Join(prefix, dashboardDir, "dist"),
 		Package:    "dist",
 	}
-	inst, err := rtinstance.Rt.Build(load.Instances(nil, cfg)[0])
+	inst, err := internal.Runtime.Build(load.Instances(nil, cfg)[0])
 	require.NoError(t, err)
 
-	dinst, err := rtinstance.Rt.Compile("str", `
+	dinst, err := internal.Runtime.Compile("str", `
 	Family: compose: Panel: {}
 	typs: [for typ, _ in Family.compose.Panel {typ}]
 	`)

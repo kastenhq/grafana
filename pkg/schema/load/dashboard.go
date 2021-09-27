@@ -8,7 +8,7 @@ import (
 	"cuelang.org/go/cue"
 	"cuelang.org/go/cue/load"
 	"github.com/grafana/grafana/pkg/schema"
-	"github.com/grafana/grafana/pkg/schema/rtinstance"
+	"github.com/grafana/grafana/pkg/schema/internal"
 )
 
 var panelSubpath = cue.MakePath(cue.Def("#Panel"))
@@ -57,7 +57,7 @@ func baseDashboardFamily(p BaseLoadPaths) (cue.Value, error) {
 		Module:     "github.com/grafana/grafana",
 		Dir:        filepath.Join(prefix, dashboardDir),
 	}
-	inst, err := rtinstance.Rt.Build(load.Instances(nil, cfg)[0])
+	inst, err := internal.Runtime.Build(load.Instances(nil, cfg)[0])
 	if err != nil {
 		cueError := schema.WrapCUEError(err)
 		if err != nil {
@@ -149,7 +149,7 @@ func (cds *compositeDashboardSchema) Validate(r schema.Resource) error {
 	if name == "" {
 		name = "resource"
 	}
-	rv, err := rtinstance.Rt.Compile(name, r.Value)
+	rv, err := internal.Runtime.Compile(name, r.Value)
 	if err != nil {
 		return err
 	}
