@@ -97,7 +97,7 @@ build-docker-dev: ## Build Docker image for development (fast).
 
 build-docker-full: ## Build Docker image for development.
 	@echo "build docker container"
-	docker build --tag grafana/grafana:dev .
+	docker build -f Dockerfile.ubuntu --tag grafana/grafana:8.1.0-rh-ubi .
 
 ##@ Services
 
@@ -141,7 +141,7 @@ clean: ## Clean up intermediate build artifacts.
 	rm -rf public/build
 
 # This repository's configuration is protected (https://readme.drone.io/signature/).
-# Use this make target to regenerate the configuration YAML files when 
+# Use this make target to regenerate the configuration YAML files when
 # you modify starlark files.
 drone:
 	drone starlark
