@@ -38,9 +38,19 @@ COPY public/api-spec.json public/api-spec.json
 RUN go mod verify
 RUN make build-go
 
-FROM ubuntu:20.04
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.6-751
 
-LABEL maintainer="Grafana team <hello@grafana.com>"
+RUN mkdir -p /licenses && \
+    echo "AL v2.0" > LICENSE && \
+    mv LICENSE /licenses
+
+LABEL maintainer="Grafana team <hello@grafana.com>" \
+        name="Grafana" \
+        release="8.1.0" \
+        version="8.1.0" \
+        summary="RedHat certified grafana image" \
+        description="Upstream grafana Dockerfile with RedHat UBI as base image to certify it on RedHat marketplace" \
+        vendor="Grafana labs"
 EXPOSE 3000
 
 ARG GF_UID="472"
@@ -59,11 +69,15 @@ WORKDIR $GF_PATHS_HOME
 COPY conf conf
 
 # curl should be part of the image
-RUN apt-get update && apt-get install -y ca-certificates curl
+#RUN apt-get update && apt-get install -y ca-certificates curl
+
+RUN microdnf update && \
+    microdnf install shadow-utils && \
+    microdnf install -y curl
 
 RUN mkdir -p "$GF_PATHS_HOME/.aws" && \
-  addgroup --system --gid $GF_GID grafana && \
-  adduser --uid $GF_UID --system --ingroup grafana grafana && \
+  groupadd --system --gid $GF_GID grafana && \
+  useradd --uid $GF_UID --system --gid grafana grafana && \
   mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
              "$GF_PATHS_PROVISIONING/dashboards" \
              "$GF_PATHS_PROVISIONING/notifiers" \
