@@ -154,7 +154,7 @@ build-docker-full: ## Build Docker image for development.
 
 build-docker-full-ubuntu: ## Build Docker image based on Ubuntu for development.
 	@echo "build docker container"
-	docker build --tag grafana/grafana:dev-ubuntu -f ./Dockerfile.ubuntu .
+	docker build --tag grafana/grafana:9.0.4-rh-ubi -f ./Dockerfile.ubuntu .
 
 
 ##@ Services
