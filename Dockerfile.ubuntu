@@ -37,7 +37,7 @@ COPY public/api-spec.json public/api-spec.json
 RUN go mod verify
 RUN make build-go
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4-210
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.6-941
 
 RUN mkdir -p /licenses && \
     echo "AL v2.0" > LICENSE && \
@@ -45,8 +45,8 @@ RUN mkdir -p /licenses && \
 
 LABEL maintainer="Grafana team <hello@grafana.com>" \
         name="Grafana" \
-        release="8.2.2" \
-        version="8.2.2" \
+        release="9.1.5" \
+        version="9.1.5" \
         summary="RedHat certified grafana image" \
         description="Upstream grafana Dockerfile with RedHat UBI as base image to certify it on RedHat marketplace" \
         vendor="Grafana labs"
